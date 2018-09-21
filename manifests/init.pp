@@ -24,6 +24,15 @@ class patch (
   $manage_package = $patch::params::manage_package,
 ) inherits patch::params {
 
+  case $::operatingsystem {
+    'FreeBSD' : {
+      $root_group = 'wheel'
+    }
+    default : {
+      $root_group = 'root'
+    }
+  }
+
   $patch_dir = "${::puppet_vardir}/patch"
   $patch_dir_ensure = $ensure ? {
     'absent' => absent,
@@ -33,11 +42,11 @@ class patch (
   file { $patch_dir:
     ensure => $patch_dir_ensure,
     owner  => 'root',
-    group  => 'root',
-    mode   => '0640',
+    group  => $root_group,
+    mode   => '0750',
   }
 
-  if $manage_package {
+  unless ! $manage_package or $manage_package != 'false' {
     package { $package: ensure => $ensure }
   }
 }

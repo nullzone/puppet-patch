@@ -1,3 +1,7 @@
+## 2016-10-08 - Release 1.4.1
+
+Nasty support for FreeBSD.
+
 ## 2016-10-08 - Release 1.4.0
 
 Add support for Ubuntu 16.04.

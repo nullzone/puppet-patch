@@ -28,13 +28,21 @@ define patch::file (
   }
   $patch_name = md5($target)
   $patch_file = "${patch::patch_dir}/${real_prefix}${patch_name}.patch"
+  case $::operatingsystem {
+    'FreeBSD' : {
+      $root_group = 'wheel'
+    }
+    default : {
+      $root_group = 'root'
+    }
+  }
 
   file { $patch_file:
     ensure  => file,
     content => $diff_content,
     source  => $diff_source,
     owner   => 'root',
-    group   => 'root',
+    group   => $root_group,
     mode    => '0640',
   }
 
